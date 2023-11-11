@@ -1,3 +1,3 @@
 export default function RootPage() {
-  return <h1>Sample</h1>
+  return <h1 className="text-green-400">Sample</h1>
 }
