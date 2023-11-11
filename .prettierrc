@@ -1,0 +1,8 @@
+{
+  "trailingComma": "none",
+  "arrowParens": "avoid",
+  "editorconfig": true,
+  "endOfLine": "lf",
+  "useTabs": false,
+  "semi": false
+}
