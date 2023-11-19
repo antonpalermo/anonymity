@@ -1,10 +1,10 @@
 import { Inter } from "next/font/google"
 import { getServerSession } from "next-auth"
 
-import "../styles/globals.css"
+import "@/styles/globals.css"
 
-import option from "./api/auth/[...nextauth]/options"
-import SessionProvider from "../providers/session"
+import option from "@/app/api/auth/[...nextauth]/options"
+import SessionProvider from "@/providers/session"
 
 export const metadata = {
   title: "Anonymity",
