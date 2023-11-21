@@ -2,6 +2,7 @@
 
 import { useForm, SubmitHandler } from "react-hook-form"
 import { InputFields } from "@/libs/schema/teamSchema"
+import { useRouter } from "next/navigation"
 
 export default function CreateTeamPage() {
   const {
@@ -10,6 +11,7 @@ export default function CreateTeamPage() {
     setError,
     formState: { errors }
   } = useForm<InputFields>()
+  const router = useRouter()
 
   const submit: SubmitHandler<InputFields> = async data => {
     const request = await fetch("/api/team/create", {
@@ -26,6 +28,9 @@ export default function CreateTeamPage() {
         setError(e.name, { type: "manual", message: e.message })
       )
     }
+
+    const { id } = await request.json()
+    router.push(`/${id}`)
   }
 
   return (
