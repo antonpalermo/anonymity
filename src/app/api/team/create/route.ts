@@ -1,11 +1,11 @@
-import { createTeamSchema } from "@/libs/schema/create-team"
+import { teamSchema } from "@/libs/schema/teamSchema"
 import { NextResponse } from "next/server"
 
 export async function POST(req: Request) {
   // get team details in the request body.
   const body = await req.json()
   // parse and validate the request body
-  const result = createTeamSchema.safeParse(body)
+  const result = teamSchema.safeParse(body)
 
   if (result.success === false) {
     const parsedErrors = result.error.issues.map(e => ({

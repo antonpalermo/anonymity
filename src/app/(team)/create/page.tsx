@@ -1,7 +1,7 @@
 "use client"
 
 import { useForm, SubmitHandler } from "react-hook-form"
-import { InputFields } from "@/libs/schema/create-team"
+import { InputFields } from "@/libs/schema/teamSchema"
 
 export default function CreateTeamPage() {
   const {
