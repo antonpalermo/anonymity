@@ -26,6 +26,17 @@ export async function POST(req: Request) {
   }
 
   try {
+    const isExist = await prisma.team.findFirst({
+      where: { name }
+    })
+
+    if (isExist) {
+      return NextResponse.json(
+        { message: `${name} is already taken.` },
+        { status: 409 }
+      )
+    }
+
     const team = await prisma.team.create({
       data: {
         name,

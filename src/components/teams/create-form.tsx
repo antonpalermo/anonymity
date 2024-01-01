@@ -5,6 +5,7 @@ import { useForm, SubmitHandler } from "react-hook-form"
 
 import { InputFields } from "@/libs/schema/teamSchema"
 import { useSession } from "next-auth/react"
+import { useState } from "react"
 
 export default function CreateForm() {
   const {
@@ -16,7 +17,12 @@ export default function CreateForm() {
   const router = useRouter()
   const { update } = useSession()
 
+  const [error, setFormError] = useState("")
+
   const submit: SubmitHandler<InputFields> = async data => {
+    // clear form error
+    setFormError("")
+    // send the request
     const request = await fetch("/api/team/create", {
       method: "POST",
       headers: {
@@ -25,16 +31,21 @@ export default function CreateForm() {
       body: JSON.stringify(data)
     })
 
-    if (!request.ok) {
-      const response = await request.json()
+    const response = await request.json()
+
+    if (request.ok) {
+      update({ role: "admin" })
+      router.push(`/${response.id}`)
+    }
+
+    // check if the request is invalid
+    if (!request.ok && request.status === 400) {
       response.errors.map(e =>
         setError(e.name, { type: "manual", message: e.message })
       )
     }
 
-    const { id } = await request.json()
-    update({ role: "admin" })
-    router.push(`/${id}`)
+    return setFormError(response.message)
   }
 
   return (
@@ -53,6 +64,7 @@ export default function CreateForm() {
             <span className="text-red-500 text-sm">{errors.name.message}</span>
           )}
         </div>
+        {error}
         <button type="submit">Create</button>
       </form>
     </div>
