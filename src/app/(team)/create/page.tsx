@@ -9,12 +9,12 @@ export default async function CreateTeamPage() {
   const {
     user: { email }
   } = await getServerSession(option)
-  const { id } = await prisma.team.findFirst({
+  const team = await prisma.team.findFirst({
     where: { members: { some: { user: { email } } } }
   })
 
-  if (id) {
-    redirect(`/${id}`)
+  if (team) {
+    redirect(`/${team.id}`)
   }
 
   return <CreateForm />

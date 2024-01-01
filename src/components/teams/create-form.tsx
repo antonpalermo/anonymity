@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation"
 import { useForm, SubmitHandler } from "react-hook-form"
 
 import { InputFields } from "@/libs/schema/teamSchema"
+import { useSession } from "next-auth/react"
 
 export default function CreateForm() {
   const {
@@ -13,6 +14,7 @@ export default function CreateForm() {
     formState: { errors }
   } = useForm<InputFields>()
   const router = useRouter()
+  const { update } = useSession()
 
   const submit: SubmitHandler<InputFields> = async data => {
     const request = await fetch("/api/team/create", {
@@ -31,6 +33,7 @@ export default function CreateForm() {
     }
 
     const { id } = await request.json()
+    update({ role: "admin" })
     router.push(`/${id}`)
   }
 
