@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation"
 
 import prisma from "@/db/prisma"
+import Navbar from "@/components/navbar"
 
 export default async function DashboardLayout({
   children,
@@ -16,9 +17,11 @@ export default async function DashboardLayout({
   }
 
   return (
-    <div>
-      <h1>Dashboard Layout</h1>
-      {children}
-    </div>
+    <>
+      <Navbar />
+      <main>
+        <div className="max-w-7xl mx-auto py-5">{children}</div>
+      </main>
+    </>
   )
 }
