@@ -22,6 +22,7 @@ const option: NextAuthOptions = {
   callbacks: {
     jwt: async ({ token, user, trigger, session }) => {
       if (trigger === "update" && session.role) {
+        token.tid = session.tid
         token.role = session.role
       }
 
@@ -41,6 +42,7 @@ const option: NextAuthOptions = {
     },
     session: async ({ session, token }) => {
       session.user.id = token.id
+      session.user.tid = token.tid
       session.user.role = token.role
 
       return Promise.resolve(session)
