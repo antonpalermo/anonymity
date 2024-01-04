@@ -49,6 +49,7 @@ model User {
   accounts      Account[]
   sessions      Session[]
   teams         Member[]
+  Report        Report[]
 
   @@map("users")
 }
@@ -66,6 +67,7 @@ model Team {
   id          String   @id @unique @default(uuid())
   name        String
   members     Member[]
+  reports     Report[]
   createdDate DateTime @default(now())
 
   @@map("teams")
@@ -87,4 +89,16 @@ model Member {
   role   Role
 
   @@map("members")
+}
+
+model Report {
+  id          String   @id @default(cuid())
+  contents    Json
+  createdDate DateTime @default(now())
+  team        Team?    @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  teamId      String?
+  owner       User     @relation(fields: [ownerId], references: [id])
+  ownerId     String
+
+  @@map("reports")
 }
