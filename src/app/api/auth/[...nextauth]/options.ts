@@ -32,6 +32,7 @@ const option: NextAuthOptions = {
         })
         // check if the user already have a team.
         if (access) {
+          token.tid = access.teamId
           token.role = access.role
         }
 
