@@ -2,14 +2,17 @@ import { redirect } from "next/navigation"
 import { getServerSession } from "next-auth"
 
 import option from "@/app/api/auth/[...nextauth]/options"
-import CreateForm from "@/components/teams/create-form"
 
-export default async function CreateTeamPage() {
+export default async function RootPage() {
   const { user } = await getServerSession(option)
 
-  if (user.team) {
-    redirect(`/`)
+  if (!user.team) {
+    redirect("/create")
   }
 
-  return <CreateForm />
+  return (
+    <div>
+      <h1>Dashboard</h1>
+    </div>
+  )
 }
