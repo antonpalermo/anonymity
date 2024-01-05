@@ -5,8 +5,8 @@ declare module "next-auth" {
   interface Session {
     user: {
       id?: string
-      tid?: string // team id
       role?: string
+      team?: { id?: string }
     } & DefaultSession["user"]
   }
 }
@@ -16,7 +16,7 @@ declare module "next-auth/jwt" {
   interface JWT {
     /** OpenID ID Token */
     id?: string
-    tid?: string // team id
     role?: string
+    team?: { id?: string }
   }
 }

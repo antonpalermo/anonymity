@@ -22,7 +22,7 @@ const option: NextAuthOptions = {
   callbacks: {
     jwt: async ({ token, user, trigger, session }) => {
       if (trigger === "update" && session.role) {
-        token.tid = session.tid
+        token.team = session.team
         token.role = session.role
       }
 
@@ -32,7 +32,7 @@ const option: NextAuthOptions = {
         })
         // check if the user already have a team.
         if (access) {
-          token.tid = access.teamId
+          token.team = { id: access.teamId }
           token.role = access.role
         }
 
@@ -43,7 +43,7 @@ const option: NextAuthOptions = {
     },
     session: async ({ session, token }) => {
       session.user.id = token.id
-      session.user.tid = token.tid
+      session.user.team = token.team
       session.user.role = token.role
 
       return Promise.resolve(session)

@@ -34,7 +34,7 @@ export default function CreateForm() {
     const response = await request.json()
 
     if (request.ok) {
-      await update({ role: "admin", tid: response.id })
+      await update({ role: "admin", team: { id: response.id } })
       router.push(`/${response.id}`)
     }
 
