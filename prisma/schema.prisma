@@ -65,7 +65,7 @@ model VerificationToken {
 
 model Team {
   id          String   @id @unique @default(uuid())
-  name        String
+  name        String   @unique
   members     Member[]
   reports     Report[]
   createdDate DateTime @default(now())
