@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation"
 import { useForm, SubmitHandler } from "react-hook-form"
 
-import { InputFields } from "@/libs/schema/teamSchema"
+import { InputFields } from "@/utils/schema/team"
 import { useSession } from "next-auth/react"
 import { useState } from "react"
 

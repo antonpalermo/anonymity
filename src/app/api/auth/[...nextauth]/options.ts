@@ -1,7 +1,7 @@
 import { NextAuthOptions } from "next-auth"
 import { PrismaAdapter } from "@auth/prisma-adapter"
 
-import prisma from "@/db/prisma"
+import prisma from "@/utils/prisma"
 import GoogleProvider from "next-auth/providers/google"
 
 /**

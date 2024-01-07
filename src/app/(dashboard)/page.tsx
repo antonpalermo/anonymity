@@ -1,6 +1,6 @@
 import { getServerSession } from "next-auth"
 
-import team from "@/libs/actions/team"
+import team from "@/utils/actions/team"
 import option from "@/app/api/auth/[...nextauth]/options"
 
 export default async function RootPage() {

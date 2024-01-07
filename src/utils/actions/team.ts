@@ -1,7 +1,7 @@
 import { Prisma } from "@prisma/client"
 import { redirect } from "next/navigation"
 
-import prisma from "@/db/prisma"
+import prisma from "@/utils/prisma"
 
 /**
  * get user's assigned team.

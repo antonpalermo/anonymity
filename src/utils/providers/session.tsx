@@ -13,7 +13,7 @@ export default function SessionProvider({
   children
 }: SessionProviderProps) {
   return (
-    <NextAuthSessionProvider session={session}>
+    <NextAuthSessionProvider session={session} refetchOnWindowFocus={false}>
       {children}
     </NextAuthSessionProvider>
   )

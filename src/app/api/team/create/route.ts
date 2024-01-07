@@ -1,9 +1,9 @@
 import { NextResponse } from "next/server"
 import { getServerSession } from "next-auth"
 
-import { teamSchema } from "@/libs/schema/teamSchema"
+import { teamSchema } from "@/utils/schema/team"
 
-import prisma from "@/db/prisma"
+import prisma from "@/utils/prisma"
 import option from "@/app/api/auth/[...nextauth]/options"
 
 export async function POST(req: Request) {

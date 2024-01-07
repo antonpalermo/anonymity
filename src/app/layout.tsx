@@ -4,7 +4,7 @@ import { getServerSession } from "next-auth"
 import "@/styles/globals.css"
 
 import option from "@/app/api/auth/[...nextauth]/options"
-import SessionProvider from "@/providers/session"
+import SessionProvider from "@/utils/providers/session"
 
 export const metadata = {
   title: "Anonymity",
