@@ -5,9 +5,9 @@ import option from "@/app/api/auth/[...nextauth]/options"
 import CreateForm from "@/components/teams/create-form"
 
 export default async function CreateTeamPage() {
-  const { user } = await getServerSession(option)
+  const session = await getServerSession(option)
 
-  if (user.team) {
+  if (session?.user.team) {
     redirect(`/`)
   }
 

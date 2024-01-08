@@ -2,7 +2,7 @@ import option from "@/app/api/auth/[...nextauth]/options"
 import { getServerSession } from "next-auth"
 
 export default async function Navbar() {
-  const { user } = await getServerSession(option)
+  const session = await getServerSession(option)
 
   return (
     <nav className="w-full">
@@ -11,7 +11,7 @@ export default async function Navbar() {
           <h1>Anonymity</h1>
           <div>
             <img
-              src={user.image}
+              src={session?.user.image!}
               alt="user avatar"
               className="w-10 h-10 rounded-full"
             />

@@ -1,65 +1,72 @@
+"use server"
+
+import { z } from "zod"
 import { Prisma } from "@prisma/client"
-import { redirect } from "next/navigation"
+import { getServerSession } from "next-auth"
 
 import prisma from "@/utils/prisma"
+import option from "@/app/api/auth/[...nextauth]/options"
 
-/**
- * get user's assigned team.
- * @param email email address of the member
- */
-async function find(email: string) {
-  // team data
-  let team: Prisma.TeamGetPayload<{
-    include: { members: { select: { role: true; user: true } } }
-  }>
-
-  try {
-    // find the first team and assign it to team variable.
-    team = await prisma.team.findFirst({
-      where: { members: { some: { user: { email } } } },
-      include: { members: { select: { role: true, user: true } } }
+const schema = z.object({
+  name: z
+    .string()
+    .refine(data => data.trim() !== "", { message: "Name is required" })
+    .refine(data => data.length >= 3 || data.trim() === "", {
+      message: "Name must be at least 3 characters long"
     })
-  } catch (e) {
-    // console log the error.
-    if (e instanceof Prisma.PrismaClientKnownRequestError) {
-      console.log({ code: e.code, message: e.message })
-    }
+})
+
+export async function createTeam(prevState: { name: "" }, formData: FormData) {
+  // get server session
+  const session = await getServerSession(option)
+  // check if session is valid if not return an error
+  if (!session) {
+    return { error: "You must be signed in to perform this action!" }
+  }
+  // check the provided input
+  const parsed = schema.safeParse({
+    name: formData.get("name")
+  })
+
+  // if not successful then return the error.
+  if (!parsed.success) {
+    return { error: parsed.error.flatten().fieldErrors.name }
   }
 
-  if (!team) {
-    // if there's no team available redirect them to
-    // create team page.
-    redirect(`/team/create`)
-  }
-  // return the team data if exists.
-  return team
-}
-
-async function create(name: string, admin: string) {
-  // team data
-  let team: Prisma.TeamGetPayload<{
-    include: { members: { select: { role: true; user: true } } }
-  }>
+  const data = parsed.data
+  const user = session.user
 
   try {
-    team = await prisma.team.create({
+    await prisma.team.create({
       data: {
-        name,
+        name: data.name,
         members: {
-          create: { user: { connect: { email: admin } }, role: "admin" }
+          create: {
+            user: { connect: { email: user.email! } },
+            role: "admin"
+          }
         }
       },
-      include: { members: { select: { role: true, user: true } } }
+      // include members in the result.
+      include: {
+        members: {
+          select: {
+            user: { select: { name: true, email: true, image: true } },
+            role: true
+          }
+        }
+      }
     })
   } catch (e) {
+    // specific error codes returned for unique key constrains
     if (e instanceof Prisma.PrismaClientKnownRequestError) {
       if (e.code === "P2002") {
-        return { message: `${name} is already taken` }
+        return { error: `${data.name} is already taken` }
       }
     }
+
+    return { error: "Unable to create team. Please try again later." }
   }
 
-  return create
+  return { message: `${data.name} successfuly created.` }
 }
-
-export default { find, create }
