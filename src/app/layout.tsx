@@ -1,6 +1,6 @@
 import { Inter } from "next/font/google"
+import { Toaster } from "react-hot-toast"
 import { getServerSession } from "next-auth"
-
 import "@/styles/globals.css"
 
 import option from "@/app/api/auth/[...nextauth]/options"
@@ -23,6 +23,7 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
+        <Toaster position={"top-right"} />
         <SessionProvider session={session}>{children}</SessionProvider>
       </body>
     </html>

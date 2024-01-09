@@ -2,9 +2,10 @@
 
 import { useFormState, useFormStatus } from "react-dom"
 
-const initialState = {
-  name: ""
-}
+import { createTeam } from "@/utils/actions/team"
+import { useState } from "react"
+import toast from "react-hot-toast"
+import { redirect } from "next/navigation"
 
 function Submit() {
   const { pending } = useFormStatus()
@@ -16,20 +17,31 @@ function Submit() {
   )
 }
 
-export default function CreateForm({
-  action
-}: {
-  action: (prevState: { name: "" }, formData: FormData) => any
-}) {
-  const [state, formAction] = useFormState(action, initialState)
+export default function CreateForm() {
+  const [error, setError] = useState("")
+
+  async function handler(formData: FormData) {
+    const result = await createTeam(formData)
+
+    if (result.error) {
+      const error = result.error
+
+      if (error.type === "server") {
+        toast.error(error.message)
+      } else {
+        setError(error.message)
+      }
+    } else {
+      toast.success(result.message)
+      redirect("/")
+    }
+  }
 
   return (
-    <>
-      <form action={formAction}>
-        <input type="text" name="name" placeholder="Name" />
-        <Submit />
-      </form>
-      {state?.error && <span>{JSON.stringify(state.error)}</span>}
-    </>
+    <form action={handler}>
+      <input type="text" name="name" placeholder="Name" />
+      <Submit />
+      {error}
+    </form>
   )
 }

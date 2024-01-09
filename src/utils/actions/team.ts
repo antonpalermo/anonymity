@@ -16,12 +16,17 @@ const schema = z.object({
     })
 })
 
-export async function createTeam(prevState: { name: "" }, formData: FormData) {
+export async function createTeam(formData: FormData) {
   // get server session
   const session = await getServerSession(option)
   // check if session is valid if not return an error
   if (!session) {
-    return { error: "You must be signed in to perform this action!" }
+    return {
+      error: {
+        type: "server",
+        message: "You must be signed in to perform this action!"
+      }
+    }
   }
   // check the provided input
   const parsed = schema.safeParse({
@@ -30,7 +35,12 @@ export async function createTeam(prevState: { name: "" }, formData: FormData) {
 
   // if not successful then return the error.
   if (!parsed.success) {
-    return { error: parsed.error.flatten().fieldErrors.name }
+    return {
+      error: {
+        type: "validation",
+        message: parsed.error.errors.map(err => err.message)[0]
+      }
+    }
   }
 
   const data = parsed.data
@@ -61,11 +71,21 @@ export async function createTeam(prevState: { name: "" }, formData: FormData) {
     // specific error codes returned for unique key constrains
     if (e instanceof Prisma.PrismaClientKnownRequestError) {
       if (e.code === "P2002") {
-        return { error: `${data.name} is already taken` }
+        return {
+          error: {
+            type: "validation",
+            message: `${data.name} is already taken`
+          }
+        }
       }
     }
 
-    return { error: "Unable to create team. Please try again later." }
+    return {
+      error: {
+        type: "server",
+        message: "Unable to create team. Please try again later."
+      }
+    }
   }
 
   return { message: `${data.name} successfuly created.` }
