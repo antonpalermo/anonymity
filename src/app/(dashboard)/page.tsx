@@ -1,11 +1,14 @@
-import { getServerSession } from "next-auth"
-
-import option from "@/app/api/auth/[...nextauth]/options"
+import team from "@/utils/helpers/team"
+import { redirect } from "next/navigation"
 
 export default async function RootPage() {
-  // check session token
-  const session = await getServerSession(option)
   // get all available team
+  const teamDetails = await team.getTeam()
+
+  // if no team created then redirect user to create page.
+  if (!teamDetails) {
+    redirect("/team/create")
+  }
 
   return (
     <div>
