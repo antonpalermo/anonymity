@@ -1,5 +1,7 @@
 import option from "@/app/api/auth/[...nextauth]/options"
 import { getServerSession } from "next-auth"
+import Link from "next/link"
+import { redirect } from "next/navigation"
 
 export default async function Navbar() {
   const session = await getServerSession(option)
@@ -10,6 +12,7 @@ export default async function Navbar() {
         <div className="inline-flex w-full items-center justify-between">
           <h1>Anonymity</h1>
           <div>
+            <Link href={"/incident/create"}>Create</Link>
             <img
               src={session?.user.image!}
               alt="user avatar"
