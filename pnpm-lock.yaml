@@ -11,6 +11,18 @@ dependencies:
   '@prisma/client':
     specifier: ^5.7.1
     version: 5.7.1(prisma@5.7.1)
+  '@tiptap/extension-document':
+    specifier: ^2.1.16
+    version: 2.1.16(@tiptap/core@2.1.16)
+  '@tiptap/extension-heading':
+    specifier: ^2.1.16
+    version: 2.1.16(@tiptap/core@2.1.16)
+  '@tiptap/extension-placeholder':
+    specifier: ^2.1.16
+    version: 2.1.16(@tiptap/core@2.1.16)(@tiptap/pm@2.1.16)
+  '@tiptap/extension-text':
+    specifier: ^2.1.16
+    version: 2.1.16(@tiptap/core@2.1.16)
   '@tiptap/pm':
     specifier: ^2.1.16
     version: 2.1.16
@@ -499,6 +511,16 @@ packages:
       '@tiptap/core': ^2.0.0
     dependencies:
       '@tiptap/core': 2.1.16(@tiptap/pm@2.1.16)
+    dev: false
+
+  /@tiptap/extension-placeholder@2.1.16(@tiptap/core@2.1.16)(@tiptap/pm@2.1.16):
+    resolution: {integrity: sha512-C6xgWKn6LT7yhvz0RCHjzFxpstFCHUw2eXisrHlOz36SP/1EmGIBiKqJUP7ySSSQMgl4hzHDhj6W1KyGdsyYaA==}
+    peerDependencies:
+      '@tiptap/core': ^2.0.0
+      '@tiptap/pm': ^2.0.0
+    dependencies:
+      '@tiptap/core': 2.1.16(@tiptap/pm@2.1.16)
+      '@tiptap/pm': 2.1.16
     dev: false
 
   /@tiptap/extension-strike@2.1.16(@tiptap/core@2.1.16):

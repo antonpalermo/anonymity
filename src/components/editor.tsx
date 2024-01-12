@@ -1,17 +1,82 @@
 "use client"
 
+import { KeyboardEvent } from "react"
 import { useEditor, EditorContent } from "@tiptap/react"
 
+import Text from "@tiptap/extension-text"
+import Heading from "@tiptap/extension-heading"
+import Document from "@tiptap/extension-document"
 import StarterKit from "@tiptap/starter-kit"
+import Placeholder from "@tiptap/extension-placeholder"
 
 export default function Editor() {
-  const editor = useEditor({
-    extensions: [StarterKit]
+  const headingEditor = useEditor({
+    extensions: [
+      Text,
+      Document,
+      Placeholder.configure({
+        placeholder: "Untitled Document"
+      }),
+      Heading.configure({
+        levels: [1]
+      })
+    ]
   })
 
+  const contentEditor = useEditor({
+    extensions: [
+      Placeholder.configure({
+        placeholder: "Write something..."
+      }),
+      StarterKit.configure({
+        heading: { levels: [2, 3] }
+      })
+    ]
+  })
+
+  function handleHeadingKeydown(event: KeyboardEvent<HTMLDivElement>): void {
+    if (!headingEditor || !contentEditor) return
+
+    const selection = headingEditor?.state.selection
+
+    if (event.shiftKey) {
+      return
+    }
+
+    if (event.key === "Enter" || event.key === "ArrowDown") {
+      contentEditor.commands.focus("start")
+    }
+
+    if (event.key === "ArrowRight") {
+      if (selection.$head.nodeAfter === null) {
+        contentEditor.commands.focus("start")
+      }
+    }
+  }
+
+  function handleContentKeydown(event: KeyboardEvent<HTMLDivElement>): void {
+    if (!headingEditor || !contentEditor) return
+    const selection = contentEditor?.state.selection
+
+    if (event.shiftKey) {
+      return
+    }
+
+    if (event.key === "ArrowUp" && contentEditor.isEmpty) {
+      headingEditor.commands.focus("end")
+    }
+
+    if (event.key === "ArrowLeft") {
+      if (selection.$head.nodeBefore === null) {
+        headingEditor.commands.focus("end")
+      }
+    }
+  }
+
   return (
-    <div>
-      <EditorContent editor={editor} />
+    <div className="">
+      <EditorContent editor={headingEditor} onKeyDown={handleHeadingKeydown} />
+      <EditorContent editor={contentEditor} onKeyDown={handleContentKeydown} />
     </div>
   )
 }
