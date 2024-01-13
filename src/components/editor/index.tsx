@@ -2,32 +2,14 @@
 
 import { KeyboardEvent } from "react"
 import { useEditor, EditorContent, Extension } from "@tiptap/react"
-import { Plugin, PluginKey } from "@tiptap/pm/state"
+
+import { PreventNewLine } from "@/components/editor/extensions"
 
 import Text from "@tiptap/extension-text"
 import Heading from "@tiptap/extension-heading"
 import Document from "@tiptap/extension-document"
 import StarterKit from "@tiptap/starter-kit"
 import Placeholder from "@tiptap/extension-placeholder"
-
-const PreventNewLine = Extension.create({
-  name: "preventNewLine",
-  addProseMirrorPlugins: () => {
-    return [
-      new Plugin({
-        key: new PluginKey("preventNewLine"),
-        props: {
-          handleKeyDown: (_, event) => {
-            if (event.key === "Enter" && !event.shiftKey) {
-              return true
-            }
-            return false
-          }
-        }
-      })
-    ]
-  }
-})
 
 export default function Editor() {
   const headingEditor = useEditor({
@@ -50,7 +32,7 @@ export default function Editor() {
         placeholder: "Write something..."
       }),
       StarterKit.configure({
-        heading: { levels: [2, 3] }
+        heading: { levels: [2] }
       })
     ]
   })
