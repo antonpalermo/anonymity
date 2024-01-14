@@ -1,7 +1,7 @@
 "use client"
 
-import { KeyboardEvent } from "react"
-import { useEditor, EditorContent, Extension } from "@tiptap/react"
+import { KeyboardEvent, useEffect } from "react"
+import { useEditor, EditorContent, JSONContent } from "@tiptap/react"
 
 import { PreventNewLine } from "@/components/editor/extensions"
 
@@ -11,11 +11,17 @@ import Document from "@tiptap/extension-document"
 import StarterKit from "@tiptap/starter-kit"
 import Placeholder from "@tiptap/extension-placeholder"
 
-export default function Editor() {
+interface EditorProps {
+  editable?: boolean
+}
+
+export default function Editor({ editable = true }: EditorProps) {
   const headingEditor = useEditor({
     extensions: [
       Text,
-      Document,
+      Document.extend({
+        content: "heading"
+      }),
       PreventNewLine,
       Placeholder.configure({
         placeholder: "Untitled Document"
@@ -23,7 +29,8 @@ export default function Editor() {
       Heading.configure({
         levels: [1]
       })
-    ]
+    ],
+    editable
   })
 
   const contentEditor = useEditor({
@@ -34,7 +41,8 @@ export default function Editor() {
       StarterKit.configure({
         heading: { levels: [2] }
       })
-    ]
+    ],
+    editable
   })
 
   function handleHeadingKeydown(event: KeyboardEvent<HTMLDivElement>): void {
@@ -78,6 +86,15 @@ export default function Editor() {
       }
     }
   }
+
+  useEffect(() => {
+    if (!headingEditor || !contentEditor) return
+
+    if (editable) {
+      headingEditor.setEditable(editable)
+      contentEditor.setEditable(editable)
+    }
+  }, [editable])
 
   return (
     <div className="">
