@@ -49,7 +49,6 @@ model User {
   accounts      Account[]
   sessions      Session[]
   teams         Member[]
-  Report        Report[]
 
   @@map("users")
 }
@@ -64,11 +63,11 @@ model VerificationToken {
 }
 
 model Team {
-  id          String   @id @unique @default(uuid())
-  name        String   @unique
+  id          String     @id @unique @default(uuid())
+  name        String     @unique
   members     Member[]
-  reports     Report[]
-  createdDate DateTime @default(now())
+  reports     Incident[]
+  createdDate DateTime   @default(now())
 
   @@map("teams")
 }
@@ -91,14 +90,13 @@ model Member {
   @@map("members")
 }
 
-model Report {
+model Incident {
   id          String   @id @default(cuid())
   contents    Json
-  createdDate DateTime @default(now())
+  reporter    String
   team        Team?    @relation(fields: [teamId], references: [id], onDelete: Cascade)
   teamId      String?
-  owner       User     @relation(fields: [ownerId], references: [id])
-  ownerId     String
+  createdDate DateTime @default(now())
 
-  @@map("reports")
+  @@map("incidents")
 }
