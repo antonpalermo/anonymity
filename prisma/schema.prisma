@@ -92,6 +92,7 @@ model Member {
 
 model Incident {
   id          String   @id @default(cuid())
+  heading     String
   contents    Json
   reporter    String
   team        Team?    @relation(fields: [teamId], references: [id], onDelete: Cascade)
