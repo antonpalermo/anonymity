@@ -34,7 +34,7 @@ export async function createTeam(formData: FormData) {
   try {
     await team.createTeam(data.name)
   } catch (error) {
-    return error
+    return { error: { type: "server", message: "unable to create team" } }
   }
 
   return { message: `${data.name} successfuly created.` }
